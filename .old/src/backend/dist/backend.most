@@ -1,0 +1,124 @@
+// Version: 1.0.0
+type AvatarConfig__186733120 = Text;
+type Comment__804484252 =
+  {
+    authorPrincipal : Principal;
+    createdAt : Int;
+    id : Nat;
+    targetId : Nat;
+    targetType : TargetType__763285307;
+    text : Text
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type ExternalBlob__671167343 = Blob;
+type FavoriteType__206655769 = {#photo; #slap; #video};
+type Favorite__955896187 =
+  {
+    createdAt : Int;
+    favoriteType : FavoriteType__206655769;
+    id : Nat;
+    ownerPrincipal : Principal;
+    targetId : Nat
+  };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type Photo__518124939 =
+  {
+    blob : ExternalBlob__671167343;
+    caption : Text;
+    createdAt : Int;
+    galleryId : ?Nat;
+    id : Nat;
+    title : Text;
+    uploaderPrincipal : Principal
+  };
+type Slap__1013722560 =
+  {
+    authorPrincipal : Principal;
+    createdAt : Int;
+    id : Nat;
+    moodEmoji : ?Text;
+    text : Text
+  };
+type TargetType__763285307 = {#photo; #post; #video};
+type UserId__158757552 = Principal;
+type UserProfile__446616884 =
+  {
+    avatarBlob : ?ExternalBlob__671167343;
+    avatarConfig : AvatarConfig__186733120;
+    bio : Text;
+    createdAt : Int;
+    username : Text
+  };
+type UserRole__1073662873 = {#admin; #guest; #user};
+type Video__1048425805 =
+  {
+    blob : ExternalBlob__671167343;
+    createdAt : Int;
+    description : Text;
+    id : Nat;
+    title : Text;
+    uploaderPrincipal : Principal;
+    viewCount : Nat
+  };
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1073662873>
+    };
+  stable baseTime : Int;
+  stable comments :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Comment__804484252]];
+      var elementIndex : Nat__490723111
+    };
+  stable favorites :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Favorite__955896187]];
+      var elementIndex : Nat__490723111
+    };
+  stable nextCommentId : {var value : Nat};
+  stable nextFavoriteId : {var value : Nat};
+  stable nextPhotoId : {var value : Nat};
+  stable nextSlapId : {var value : Nat};
+  stable nextVideoId : {var value : Nat};
+  stable photoSeeded : {var value : Bool};
+  stable photos :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Photo__518124939]];
+      var elementIndex : Nat__490723111
+    };
+  stable sampleAuthor : Principal;
+  stable slaps :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Slap__1013722560]];
+      var elementIndex : Nat__490723111
+    };
+  stable userProfiles :
+    {
+      var root : Node__46230540<UserId__158757552, UserProfile__446616884>;
+      var size : Nat__490723111
+    };
+  stable videoSeeded : {var value : Bool};
+  stable videos :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Video__1048425805]];
+      var elementIndex : Nat__490723111
+    }
+};

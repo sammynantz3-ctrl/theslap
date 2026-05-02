@@ -1,0 +1,26 @@
+{
+  "overview": "A TheSlap.com replica social network inspired by the TV show Victorious. Users can watch and upload video clips, post status updates and tweets, share photos, browse user profiles, and comment on content — all styled with the iconic early-2010s look and feel of the original site.",
+  "features": [
+    "User profiles with custom avatars",
+    "Video clips feed and upload",
+    "Photo galleries with lightbox",
+    "Public status updates and tweets with mood emojis",
+    "Commenting system",
+    "Save and favorite content",
+    "Homepage feed with trending content",
+    "Browse sections: Clips, Pix, Profiles",
+    "Internet Identity authentication"
+  ],
+  "category": "social",
+  "tags": [
+    "social-network",
+    "victorious",
+    "theslap",
+    "videos",
+    "photos",
+    "tweets",
+    "retro",
+    "2010s"
+  ],
+  "last_updated": "2026-05-02T17:40:35.977Z"
+}

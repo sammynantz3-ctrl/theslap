@@ -1,0 +1,170 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type Video = 
+ record {
+   "blob": ExternalBlob;
+   createdAt: int;
+   description: text;
+   id: nat;
+   title: text;
+   uploaderPrincipal: principal;
+   viewCount: nat;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   avatarBlob: opt ExternalBlob;
+   avatarConfig: AvatarConfig;
+   bio: text;
+   createdAt: int;
+   username: text;
+ };
+type UserId = principal;
+type TargetType = 
+ variant {
+   photo;
+   post;
+   video;
+ };
+type Slap = 
+ record {
+   authorPrincipal: principal;
+   createdAt: int;
+   id: nat;
+   moodEmoji: opt text;
+   "text": text;
+ };
+type Photo = 
+ record {
+   "blob": ExternalBlob;
+   caption: text;
+   createdAt: int;
+   galleryId: opt nat;
+   id: nat;
+   title: text;
+   uploaderPrincipal: principal;
+ };
+type FavoriteType = 
+ variant {
+   photo;
+   slap;
+   video;
+ };
+type Favorite = 
+ record {
+   createdAt: int;
+   favoriteType: FavoriteType;
+   id: nat;
+   ownerPrincipal: principal;
+   targetId: nat;
+ };
+type ExternalBlob = blob;
+type Comment = 
+ record {
+   authorPrincipal: principal;
+   createdAt: int;
+   id: nat;
+   targetId: nat;
+   targetType: TargetType;
+   "text": text;
+ };
+type AvatarConfig = text;
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  addFavorite: (targetId: nat, favoriteType: FavoriteType) ->
+   (variant {
+      err: text;
+      ok: Favorite;
+    });
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  deleteComment: (id: nat) -> (variant {
+                                 err: text;
+                                 ok: bool;
+                               });
+  deletePhoto: (id: nat) -> (variant {
+                               err: text;
+                               ok: bool;
+                             });
+  deleteSlap: (id: nat) -> (variant {
+                              err: text;
+                              ok: bool;
+                            });
+  deleteVideo: (id: nat) -> (variant {
+                               err: text;
+                               ok: bool;
+                             });
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getPhoto: (id: nat) -> (opt Photo) query;
+  getSlap: (id: nat) -> (opt Slap) query;
+  getUserProfile: (userId: UserId) -> (opt UserProfile) query;
+  getVideo: (id: nat) -> (opt Video);
+  isCallerAdmin: () -> (bool) query;
+  listComments: (targetId: nat, targetType: TargetType) ->
+   (vec Comment) query;
+  listFavorites: () -> (vec Favorite) query;
+  listPhotos: () -> (vec Photo) query;
+  listPhotosByUser: (userId: principal) -> (vec Photo) query;
+  listProfiles: () -> (vec record {
+                             UserId;
+                             UserProfile;
+                           }) query;
+  listSlaps: () -> (vec Slap) query;
+  listVideos: () -> (vec Video) query;
+  postComment: (targetId: nat, targetType: TargetType, "text": text) ->
+   (variant {
+      err: text;
+      ok: Comment;
+    });
+  postPhoto: (title: text, caption: text, "blob": ExternalBlob, galleryId:
+   opt nat) -> (variant {
+                  err: text;
+                  ok: Photo;
+                });
+  postSlap: ("text": text, moodEmoji: opt text) ->
+   (variant {
+      err: text;
+      ok: Slap;
+    });
+  postVideo: (title: text, description: text, "blob": ExternalBlob) ->
+   (variant {
+      err: text;
+      ok: Video;
+    });
+  removeFavorite: (targetId: nat, favoriteType: FavoriteType) ->
+   (variant {
+      err: text;
+      ok: bool;
+    });
+  saveCallerUserProfile: (username: text, bio: text, avatarConfig: text) ->
+   (variant {
+      err: text;
+      ok: UserProfile;
+    });
+  seedSampleComments: () -> ();
+}
